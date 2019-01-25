@@ -29,5 +29,5 @@ def index():
 def hello():
 	first=request.form.get("firstName")
 	last=request.form.get("lastName")
-	
+	''' This will saved to the DataBase'''
 	return "You typed " +first+" "+last
