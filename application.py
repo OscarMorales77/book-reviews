@@ -23,11 +23,40 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
+
     return render_template("index.html")
+
 
 @app.route("/hello", methods=["POST"])
 def hello():
-	first=request.form.get("firstName")
-	last=request.form.get("lastName")
-	''' This will saved to the DataBase'''
-	return "You typed " +first+" "+last
+    first = request.form.get("firstName")
+    last = request.form.get("lastName")
+    ''' This will be saved to the DataBase'''
+    return "You typed " + first + " " + last
+
+
+@app.route("/verify", methods=["POST"])
+def verify():
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    if password == "password" and username == "username":
+        session[username] = True
+        return "You are logged in!"
+
+    return "Not registered!"
+
+
+@app.route("/secret")
+def secret():
+    for key in session.items():
+        print(key)
+    if len(session) != 0 and session["username"]:
+        return "Secrete Page"
+    return "Not logged-in!"
+
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return "logged out!"
