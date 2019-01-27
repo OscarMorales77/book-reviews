@@ -1,4 +1,5 @@
 import os
+import csv
 
 from flask import Flask, session, render_template, request
 from flask_session import Session
@@ -20,6 +21,8 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+#A global variable for the current session to track user
+current_user=None
 
 @app.route("/")
 def index():
