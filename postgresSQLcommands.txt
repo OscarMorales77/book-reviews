@@ -1,0 +1,35 @@
+ CREATE TABLE books (isbn VARCHAR PRIMARY KEY,title VARCHAR NOT NULL,author VARCHAR NOT NULL, year INTEGER NOT NULL );
+  INSERT INTO books(isbn, title, author, year) VALUES (0380795272,'Krondor: The Betrayal','Raymond E. Feist',1998);
+  INSERT INTO books(isbn, title, author, year) VALUES (1416949658,'The Dark Is Rising','Susan Cooper',1973);
+  INSERT INTO books(isbn, title, author, year) VALUES (1857231082,'The Black Unicorn' ,'Terry Brooks',1987);
+
+CREATE TABLE users (id SERIAL PRIMARY KEY,username VARCHAR NOT NULL,password VARCHAR NOT NULL);
+  INSERT INTO users(username, password) VALUES ('bob', 'pass1');
+  INSERT INTO users(username, password) VALUES ('bill', 'pass2');
+   INSERT INTO users(username, password) VALUES ('oscar', 'cool');
+  INSERT INTO users(username, password) VALUES ('john', 'doe');
+postgresql://postgres:postgres@localhost/project1
+
+CREATE TABLE ratings (id SERIAL PRIMARY KEY,rating INTEGER NOT NULL, isbn VARCHAR REFERENCES books,username VARCHAR NOT NULL,comments VARCHAR NOT NULL);
+
+INSERT INTO ratings (rating, isbn, username, comments) VALUES (4,1416949658,'bob', 'book sucks!');
+INSERT INTO ratings (rating, isbn, username, comments) VALUES (5,1416949658,'oscar', 'cool book!');
+INSERT INTO ratings (rating, isbn, username, comments) VALUES (4,0380795272,'bill', 'book sucks!');
+INSERT INTO ratings (rating, isbn, username, comments) VALUES (5,1857231082,'oscar', 'cool book!');
+INSERT INTO ratings (rating, isbn, username, comments) VALUES (4,0380795272,'bob', 'book sucks!');
+INSERT INTO ratings (rating, isbn, username, comments) VALUES (5,1857231082,'bob', 'cool book!');
+
+select username, title,rating from ratings join books on ratings.isbn=books.isbn where username='bob';
+
+select AVG(rating), author, from ratings join books on ratings.isbn=books.isbn where author='Susan Cooper';
+select avg(rating) from ratings join books on ratings.isbn=books.isbn where author='Susan Cooper';
+
+
+
+psql postgres://USERNAME%40HOSTNAME:PASSWORD@HOSTNAME .postgres.database.azure.com:5432/DBNAME
+
+postgres://trjdzbteawlnbf:47b67860880a40a4bfdf8df967dc3b0f019c9a4226ceb64453cdd6b878be782b@ec2-107-22-162-8.compute-1.amazonaws.com:5432/d18ctfg7un8g64
+
+postgresql://postgres:postgres@localhost/project1
+or
+postgresql://om:postgres@localhost/project1
