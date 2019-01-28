@@ -8,7 +8,7 @@ CREATE TABLE users (id SERIAL PRIMARY KEY,username VARCHAR NOT NULL,password VAR
   INSERT INTO users(username, password) VALUES ('bill', 'pass2');
    INSERT INTO users(username, password) VALUES ('oscar', 'cool');
   INSERT INTO users(username, password) VALUES ('john', 'doe');
-postgresql://postgres:postgres@localhost/project1
+    postgresql://postgres:postgres@localhost/project1
 
 CREATE TABLE ratings (id SERIAL PRIMARY KEY,rating INTEGER NOT NULL, isbn VARCHAR REFERENCES books,username VARCHAR NOT NULL,comments VARCHAR NOT NULL);
 
@@ -33,3 +33,23 @@ postgres://trjdzbteawlnbf:47b67860880a40a4bfdf8df967dc3b0f019c9a4226ceb64453cdd6
 postgresql://postgres:postgres@localhost/project1
 or
 postgresql://om:postgres@localhost/project1
+
+
+select username, password from users where LOWER(username)=LOWER('bOB') AND LOWER(password)=LOWER('PasS1');
+
+-------------------------------------------------------------------------------------------------------------
+wilcard search for isbn number that beging with the given number
+select * from books where isbn like '1857%';
+
+//both are the same not sure different version of sql support the former
+select * from books where title  ~* 'dEAd';
+select * from books where LOWER(title) like LOWER('%dead%')
+
+
+
+
+
+
+
+
+
