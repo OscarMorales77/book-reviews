@@ -45,7 +45,7 @@ select * from books where isbn like '1857%';
 select * from books where title  ~* 'dEAd';
 select * from books where LOWER(title) like LOWER('%dead%')
 
-
+select * from books where author like 'susan cooper%';
 
 
 
