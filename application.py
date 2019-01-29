@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -15,6 +15,8 @@ if not os.getenv("DATABASE_URL"):
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config['JSON_SORT_KEYS'] = False
+
 Session(app)
 
 # Set up database
@@ -33,8 +35,8 @@ def index():
 
 def query_results(query, m_type):
     if m_type == "isbn" or m_type == "author":
-        print("-------calling isbn/author function " +m_type)
-        #something to consider is the performance of LOWER on a large database
+        print("-------calling isbn/author function " + m_type)
+        # something to consider is the performance of LOWER on a large database
         values = db.execute(f"select * from books where LOWER({m_type}) like LOWER('{query}%')").fetchall()
         if len(values) == 0:
             return "Sorry no Results!"
@@ -46,7 +48,7 @@ def query_results(query, m_type):
 
         return results
     else:
-        print("-------calling author function " +m_type)
+        print("-------calling author function " + m_type)
         values = db.execute(f"select * from books where title  ~* '{query}' ").fetchall()
         print(len(values))
         if len(values) == 0:
@@ -119,3 +121,15 @@ def secret():
 def logout():
     session.clear()  # remove all keys from the map named "session" that is a global variable
     return "logged out!"
+
+
+@app.route("/api/<string:isbn>")
+def api_request(isbn):
+    values = db.execute(f" select title, author, year,ratings.isbn, count(rating), avg(rating) from ratings join books "
+                        f"on ratings.isbn=books.isbn GROUP BY  title, author, year, ratings.isbn having ratings.isbn='{isbn}'; ").fetchall()
+    if len(values) == 0:  # no results found
+        return jsonify({"error": "Invalid isbn"}), 404
+    some_map={"title": values[0][0], "author": values[0][1], "year": values[0][2], "isbn": isbn,
+                    "review_count": values[0][4], "average_score": float(values[0][5])}
+
+    return jsonify(some_map)

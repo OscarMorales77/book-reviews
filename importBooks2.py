@@ -40,11 +40,13 @@ def main():
 
     print(results)
 def some_fun():
+    values=db.execute("select * from books where isbn='ss'").fetchall()
+    print((values))
     return print("----------yheeee--------")
 
 def mainGGG():
     query=185798809488
     values = db.execute(f"select * from books where isbn like '{query}%' ").fetchall()
-    print(len(values))
+
 if __name__ == "__main__":
-    main()
+    some_fun()
