@@ -51,11 +51,15 @@ select * from books where author like 'susan cooper%';
 
  select title, author, year, rating from ratings join books on ratings.isbn=books.isbn where ratings.isbn='1857231082';
 
-  select title, author, year from ratings join books on ratings.isbn=books.isbn;
+  select title, author, year, comments from ratings join books on ratings.isbn=books.isbn where ratings.isbn='1416949658';
 
 
  select title, author, year,ratings.isbn, count(rating), avg(rating) from ratings join books on ratings.isbn=books.isbn GROUP BY  title, author, year, ratings.isbn having ratings.isbn='1857231082';
 select title, author, year,ratings.isbn, count(rating), avg(rating) from ratings join books on ratings.isbn=books.isbn GROUP BY  title, author, year, ratings.isbn having ratings.isbn='1857231082';
 
 INSERT INTO ratings (rating, isbn, username, comments) VALUES (3.5,1857231082,'bob', 'book sucks!');
+
+
+
+select title, author, year, comments from ratings right join books on ratings.isbn=books.isbn where books.isbn='0441017150';
 

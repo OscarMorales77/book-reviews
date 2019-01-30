@@ -59,10 +59,8 @@ def query_results(query, m_type):
         #     results = results + "\n" + f"{row[0]} | {row[1]} | {row.author} | {row.year}"
         #
         # return results
-        for row in values:
-            print(row.author+","+row.title)
 
-        return render_template("results.html",num_results=len(values),values=values)
+        return render_template("results.html", num_results=len(values), values=values)
 
 
 @app.route("/search", methods=["POST", "GET"])
@@ -132,12 +130,20 @@ def api_request(isbn):
                         f"on ratings.isbn=books.isbn GROUP BY  title, author, year, ratings.isbn having ratings.isbn='{isbn}'; ").fetchall()
     if len(values) == 0:  # no results found
         return jsonify({"error": "Invalid isbn"}), 404
-    some_map={"title": values[0][0], "author": values[0][1], "year": values[0][2], "isbn": isbn,
-                    "review_count": values[0][4], "average_score": float(values[0][5])}
+    some_map = {"title": values[0][0], "author": values[0][1], "year": values[0][2], "isbn": isbn,
+                "review_count": values[0][4], "average_score": float(values[0][5])}
 
     return jsonify(some_map)
 
-@app.route("/<string:isbn>" )
-def book_page(isbn):
 
-    return "logged out!"
+@app.route("/<string:isbn>")
+def book_page(isbn):
+    values = db.execute(
+        f" select title, author, year, comments from ratings right join books on ratings.isbn=books.isbn where books.isbn='{isbn}'; ").fetchall()
+    # print(values[0])
+    # print(len(values))
+    get_more = False
+    if len(values) > 1:
+        get_more = True
+    print(get_more)
+    return render_template("bookpage.html", row=values[0], results=values, isbn=isbn, get_more=get_more)
