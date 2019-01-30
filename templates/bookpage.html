@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title_page %} {{row.title}}{% endblock %}
+{% block extra %}
+<link href="https://v4-alpha.getbootstrap.com/examples/jumbotron/jumbotron.css" rel="stylesheet">{% endblock %}
+{% block body %}
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">{{row.title}}</h1>
+        <h2> Author: {{row.author}} </h2>
+        <h2> Publication Year: {{row.year}} </h2>
+        <h2> ISBN: {{isbn}} </h2>
+
+    </div>
+</div>
+
+
+<div class="container">
+
+
+    <div class="row">
+
+        {% if get_more %}
+        {% for sub_row in results %}
+        <div class="col">
+            <h3>Review</h3>
+            <p>{{sub_row.comments}} </p>
+
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <div class="col">
+            <h3>Review</h3>
+            <p>{{row.comments}} </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+</div>
+
+{% endblock %}
