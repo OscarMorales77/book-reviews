@@ -33,6 +33,7 @@ def mainOther():
 def main():
     values=db.execute("select * from books where title  ~* 'dEAd' limit 7").fetchall()
     #values2=db.execute("select * from books where LOWER(title) like LOWER('%dead%') ").fetchall()
+    print(values[0])
     results=""
     for row in values:
         results=results+"\n"+f"{row[0]} | {row[1]} | {row.author} | {row.year}"
@@ -49,4 +50,4 @@ def mainGGG():
     values = db.execute(f"select * from books where isbn like '{query}%' ").fetchall()
 
 if __name__ == "__main__":
-    some_fun()
+    main()

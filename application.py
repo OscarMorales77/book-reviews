@@ -48,18 +48,21 @@ def query_results(query, m_type):
 
         return results
     else:
-        print("-------calling author function " + m_type)
         values = db.execute(f"select * from books where title  ~* '{query}' ").fetchall()
-        print(len(values))
+
         if len(values) == 0:
             return "Sorry no Results!"
 
-        results = ""
+        # results = ""
+        # for row in values:
+        #     # different methods to get columns  either by "[i]" or the ".colName"
+        #     results = results + "\n" + f"{row[0]} | {row[1]} | {row.author} | {row.year}"
+        #
+        # return results
         for row in values:
-            # different methods to get columns  either by "[i]" or the ".colName"
-            results = results + "\n" + f"{row[0]} | {row[1]} | {row.author} | {row.year}"
+            print(row.author+","+row.title)
 
-        return results
+        return render_template("results.html",num_results=len(values),values=values)
 
 
 @app.route("/search", methods=["POST", "GET"])
@@ -133,3 +136,8 @@ def api_request(isbn):
                     "review_count": values[0][4], "average_score": float(values[0][5])}
 
     return jsonify(some_map)
+
+@app.route("/<string:isbn>" )
+def book_page(isbn):
+
+    return "logged out!"
