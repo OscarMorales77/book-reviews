@@ -29,7 +29,7 @@ current_user = None
 
 @app.route("/")
 def index():
-    # importBooks2.some_fun()
+
     return render_template("index.html")
 
 
@@ -41,12 +41,7 @@ def query_results(query, m_type):
         if len(values) == 0:
             return "Sorry no Results!"
 
-        results = ""
-        for row in values:
-            # different methods to get columns  either by "[i]" or the ".colName"
-            results = results + "\n" + f"{row[0]} | {row[1]} | {row.author} | {row.year}"
-
-        return results
+        return render_template("results.html", num_results=len(values), values=values)
     else:
         values = db.execute(f"select * from books where title  ~* '{query}' ").fetchall()
 
@@ -55,7 +50,7 @@ def query_results(query, m_type):
 
         return render_template("results.html", num_results=len(values), values=values)
 
-
+@app.route("/verify", methods=["GET"])
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
