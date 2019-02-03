@@ -41,14 +41,14 @@ def query_results(query, m_type):
         if len(values) == 0:
             return "Sorry no Results!"
 
-        return render_template("results.html", num_results=len(values), values=values)
+        return render_template("results.html", num_results=len(values), values=values, user_name=session["user"])
     else:
         values = db.execute(f"select * from books where title  ~* '{query}' ").fetchall()
 
         if len(values) == 0:
             return "Sorry no Results!"
 
-        return render_template("results.html", num_results=len(values), values=values)
+        return render_template("results.html", num_results=len(values), values=values, user_name=session["user"])
 
 @app.route("/verify", methods=["GET"])
 @app.route("/search", methods=["POST", "GET"])
@@ -147,7 +147,7 @@ def book_page(isbn):
         get_more = True
 
     return render_template("bookpage.html", row=values[0], results=values, isbn=isbn, get_more=get_more,
-                           status_code=res.status_code, api=data["books"][0])
+                           status_code=res.status_code, api=data["books"][0],user_name=session["user"])
 
 
 @app.route("/review", methods=["POST"])

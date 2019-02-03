@@ -3,6 +3,26 @@
 {% block extra %}
 <link href="https://v4-alpha.getbootstrap.com/examples/jumbotron/jumbotron.css" rel="stylesheet">{% endblock %}
 {% block body %}
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <span class="navbar-brand ">Hi {{user_name}}</span>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mr-auto">
+
+        </div>
+        <form class="form-inline mt-2 mt-md-0" action="/search" method="GET">
+
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Back to Search</button>
+        </form>
+        &nbsp;
+        &nbsp;
+        <form class="form-inline mt-2 mt-md-0" action="/logout" method="POST">
+
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Log Out</button>
+        </form>
+    </div>
+</nav>
+
+
 <div class="jumbotron">
     <div class="container">
 
@@ -33,17 +53,17 @@
         <h2 class="form-inline">Submit A Review:</h2>
 
         <form action="/review" class="form-inline" method="POST">
-                <input type="hidden" name="isbn" value="{{isbn}}" />
+            <input type="hidden" name="isbn" value="{{isbn}}"/>
 
             <div class="col-auto">
-                <label >Comments</label>
-                <textarea class="form-control" name="comments" rows="3" cols="50"></textarea>
+                <label>Comments</label>
+                <textarea class="form-control" name="comments" rows="3" cols="50" required></textarea>
             </div>
 
 
             <div class="col-auto">
-                <label >Rating</label>
-                <select multiple class="form-control" name="rating">
+                <label>Rating</label>
+                <select multiple class="form-control" name="rating" required>
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>

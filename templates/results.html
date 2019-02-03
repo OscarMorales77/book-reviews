@@ -1,27 +1,83 @@
 {% extends "layout.html" %}
 {% block title_page %} Search Results{% endblock %}
 
+
 {% block body %}
-<div class="container">
 
-    <h1 class="row">{{num_results}} matches were found!</h1>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <span class="navbar-brand ">Hi {{user_name}}</span>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mr-auto">
 
-
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-            Tittle, Author, Year, ISBN
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {% for row in values %}
-            <a class="dropdown-item" href="/books/{{row.isbn}}">{{row.title}}, {{row.author}}, {{row.year}},
-                {{row.isbn}}</a>
-            {% endfor %}
         </div>
+        <form class="form-inline mt-2 mt-md-0" action="/search" method="GET">
+
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Back to Search</button>
+        </form>
+        &nbsp;
+        &nbsp;
+
+        <form class="form-inline mt-2 mt-md-0" action="/logout" method="POST">
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Log Out</button>
+        </form>
     </div>
+</nav>
 
 
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron text-center">
+    <div class="container">
+
+        {% if num_results == 1 %}
+        <h1 class="jumbotron-heading">{{num_results}} result was found!</h1>
+        {% else %}
+        <h1 class="jumbotron-heading">{{num_results}} results were found!</h1>
+        {% endif %}
+
+
+    </div>
 </div>
 
 
+<div class="container">
+
+    <div class="row">
+        {% for row in values %}
+        <div class="col-md-2">
+            <div class="card mb-4 box-shadow">
+                <img class="card-img-top" alt="https://via.placeholder.com/348x225"
+                     src="http://covers.openlibrary.org/b/isbn/{{row.isbn}}-M.jpg" height="155px" width="200">
+                <div class="card-body">
+                    <p class="card-text">
+                        <small>Tittle: {{row.title}} <br>Author: {{row.author}}<br>Year: {{row.year}}<br>ISBN:
+                            {{row.isbn}}
+                        </small>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <form action="/books/{{row.isbn}}" method="GET">
+
+                            <button class="btn btn-sm btn-outline-secondary" type="submit"> View</button>
+
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">By Oscar Morales</span>
+    </div>
+</footer>
+
+
 {% endblock %}
+
+
