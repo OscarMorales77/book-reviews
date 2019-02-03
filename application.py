@@ -53,13 +53,6 @@ def query_results(query, m_type):
         if len(values) == 0:
             return "Sorry no Results!"
 
-        # results = ""
-        # for row in values:
-        #     # different methods to get columns  either by "[i]" or the ".colName"
-        #     results = results + "\n" + f"{row[0]} | {row[1]} | {row.author} | {row.year}"
-        #
-        # return results
-
         return render_template("results.html", num_results=len(values), values=values)
 
 
@@ -69,19 +62,22 @@ def search():
         isbn = request.form.get("isbn")
         title = request.form.get("title")
         author = request.form.get("author")
-        if isbn is not None and len(isbn) != 0:
 
+        if len(isbn) != 0 and len(title) == 0 and len(author) == 0:
+            print("isb search")
             return query_results(isbn, "isbn")
-        elif title is not None and len(title) != 0:
-
+        elif len(title) != 0 and (len(author) == 0 and len(isbn) == 0):
+            print("title search")
             return query_results(title, "title")
-        elif author is not None and len(author) != 0:
-
+        elif len(author) != 0 and (len(title) == 0 and len(isbn) == 0):
+            print("author search")
             return query_results(author, "author")
         else:
-            return "No Results, sorry!"
-
-    return render_template("search.html")
+            return "Sorry, only one input field must be submitted"
+    elif request.method=="GET" and "user" in session.keys() and session[session["user"]]:
+        return render_template("search.html", user_name=session["user"])
+    else:
+        return "Sorry you must log in to perform a search!"
 
 
 @app.route("/register", methods=["POST"])
@@ -96,6 +92,7 @@ def hello():
 
 @app.route("/verify", methods=["POST"])
 def verify():
+
     username = request.form.get("username")
     password = request.form.get("password")
     sql_command = f"select username, password from users where LOWER(username)=LOWER('{username}') AND LOWER(password)=LOWER('{password}')"
@@ -107,9 +104,9 @@ def verify():
     if len(values) == 1 and username == values[0][0] and password == values[0][1]:
         session[username] = True
         session["user"] = username
-        return "You are logged in!"
+        return render_template("search.html", user_name=username)
 
-    return "You are not registered"
+    return "You are not registered!"
 
 
 @app.route("/secret")
@@ -162,13 +159,15 @@ def book_page(isbn):
 def review_page():
     comments = request.form.get("comments")
     rating = request.form.get("rating")
-    isbn=request.form.get("isbn")
+    isbn = request.form.get("isbn")
     print(f"select * from books where isbn='{isbn}' and username='{session['user']}'")
-    value=db.execute(f"select * from ratings where isbn='{isbn}' and username='{session['user']}'").fetchall()
+    value = db.execute(f"select * from ratings where isbn='{isbn}' and username='{session['user']}'").fetchall()
     print(value)
-    if len(value)==1:
+    if len(value) == 1:
         return "Sorry you have already submitted a review for this book"
-    print(f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
-    db.execute(f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
+    print(
+        f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
+    db.execute(
+        f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.commit()
     return "Review submitted"
