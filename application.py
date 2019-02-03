@@ -100,6 +100,7 @@ def verify():
     password = request.form.get("password")
     sql_command = f"select username, password from users where LOWER(username)=LOWER('{username}') AND LOWER(password)=LOWER('{password}')"
     values = db.execute(sql_command).fetchall()
+
     # values is a "list/array" of sqlAl objects
     # each sqlAlchemy object can be accessed with [i]
     # actually, I don't need username and password because the sql query is already performing those boolean checks

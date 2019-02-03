@@ -1,48 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Book Reviews</title>
-    <link rel="stylesheet" type="text/css"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-</head>
-<body>
+{% extends "layout.html" %}
+{% block title_page %} Book Reviews {% endblock %}
 
-<div class="container">
-    <h1>A book review website!</h1>
+{% block body %}
 
-    <div class="row">
-        <h3 class="col"> Please Register</h3>
-        <form action="/register" class="col" method="POST">
-            Username: <input type="text" name="firstName" value="Enter a Value"><br>
-            Password: <input type="text" name="lastName" value="Enter a Value"><br>
-            <input type="submit" value="Submit">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <span class="navbar-brand ">Welcome to Book Reviews</span>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mr-auto">
+
+        </div>
+
+
+        <form class="form-inline mt-2 mt-md-0" action="/verify" method="POST">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input class="form-control mr-sm-2" type="text" placeholder="Username" name="username" required>
+            <input class="form-control mr-sm-2" type="password" placeholder="Password" name="password" required>
+            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Log In</button>
         </form>
+    </div>
+</nav>
+
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="col-6">Sign Up</h2>
+
+            <div class="col-6">
+                <form action="/register" method="POST">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" placeholder="Desired Username" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" placeholder="Password" name="lastName" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
 
     </div>
-
-    <div class="row">
-        <h3 class="col"> Log In</h3>
-        <form action="/verify" class="col" method="POST">
-            Username: <input type="text" name="username" value="placeholder"><br>
-            Password: <input type="text" name="password" value="placeholder"><br>
-            <input type="submit" value="Submit">
-        </form>
-
-    </div>
-
-    <div class="row">
-        <form action="/logout" class="col" method="POST">
-            <button type="submit">Log-out and confirm</button>
-        </form>
-
-    </div>
-
-
 </div>
 
+<div class="container">
 
-</body>
-</html>
+</div> <!-- /container -->
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">By Oscar Morales</span>
+    </div>
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+
+{% endblock %}
