@@ -62,12 +62,13 @@
     <br>
     <br>
     <h2>Submitted Reviews</h2>
+
     <div class="row">
 
         {% if get_more %}
         {% for sub_row in results %}
         <div class="col">
-            <h5>Rating: {{row.rating}}</h5>
+            <h5>Rating: {{sub_row.rating}}</h5>
             <p>{{sub_row.comments}} </p>
 
         </div>

@@ -148,6 +148,7 @@ def book_page(isbn):
                        params={"key": "DYmLgmG4nZ3cduTe4NgFg", "isbns": isbn})
     data = res.json()
     print(res.status_code)
+    print(values)
     get_more = False
     if len(values) > 1:
         get_more = True
