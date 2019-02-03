@@ -14,7 +14,7 @@
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       {% for row in values %}
-    <a class="dropdown-item" href="{{row.isbn}}">{{row.title}}, {{row.author}}, {{row.year}}, {{row.isbn}}</a>
+    <a class="dropdown-item" href="/books/{{row.isbn}}">{{row.title}}, {{row.author}}, {{row.year}}, {{row.isbn}}</a>
     {% endfor %}
   </div>
 </div>

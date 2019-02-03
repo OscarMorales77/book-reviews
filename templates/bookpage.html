@@ -5,24 +5,69 @@
 {% block body %}
 <div class="jumbotron">
     <div class="container">
-        <h1 class="display-3">{{row.title}}</h1>
-        <h2> Author: {{row.author}} </h2>
-        <h2> Publication Year: {{row.year}} </h2>
-        <h2> ISBN: {{isbn}} </h2>
+
+        <div class="row">
+            <div class="col-8">
+                <h1 class="display-3">{{row.title}}</h1>
+                <h2> Author: {{row.author}} </h2>
+                <h2> Publication Year: {{row.year}} </h2>
+                <h2> ISBN: {{isbn}} </h2>
+            </div>
+            <div class="col-4">
+                <img src="http://covers.openlibrary.org/b/isbn/{{isbn}}-M.jpg">
+            </div>
+        </div>
+        {% if status_code == 200 %}
+        <h4>Goodreads Review Data</h4>
+        <h6> Average Rating: {{api["average_rating"]}} </h6>
+        <h6> Number of Ratings: {{api["ratings_count"]}} </h6>
+        {% endif %}
+
 
     </div>
 </div>
 
 
 <div class="container">
+    <div class="row">
+        <h2 class="form-inline">Submit A Review:</h2>
+
+        <form action="/review" class="form-inline" method="POST">
+                <input type="hidden" name="isbn" value="{{isbn}}" />
+
+            <div class="col-auto">
+                <label >Comments</label>
+                <textarea class="form-control" name="comments" rows="3" cols="50"></textarea>
+            </div>
 
 
+            <div class="col-auto">
+                <label >Rating</label>
+                <select multiple class="form-control" name="rating">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+        </form>
+
+    </div>
+
+    <br>
+    <br>
+    <h2>Submitted Reviews</h2>
     <div class="row">
 
         {% if get_more %}
         {% for sub_row in results %}
         <div class="col">
-            <h3>Review</h3>
+            <h5>Rating: {{row.rating}}</h5>
             <p>{{sub_row.comments}} </p>
 
         </div>
@@ -30,7 +75,7 @@
 
         {% else %}
         <div class="col">
-            <h3>Review</h3>
+            <h5>Rating: {{row.rating}}</h5>
             <p>{{row.comments}} </p>
 
         </div>

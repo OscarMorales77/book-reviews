@@ -1,4 +1,4 @@
-import os
+import os, requests
 
 from flask import Flask, session, render_template, request, jsonify
 from flask_session import Session
@@ -90,6 +90,7 @@ def hello():
     last = request.form.get("lastName")
     myMap = {"first": first, "last": last}
     db.execute("INSERT INTO users(username, password) VALUES  (:first, :last)", myMap)
+    db.commit()
     return "You typed " + first + " " + last
 
 
@@ -104,6 +105,7 @@ def verify():
     # actually, I don't need username and password because the sql query is already performing those boolean checks
     if len(values) == 1 and username == values[0][0] and password == values[0][1]:
         session[username] = True
+        session["user"] = username
         return "You are logged in!"
 
     return "You are not registered"
@@ -136,14 +138,35 @@ def api_request(isbn):
     return jsonify(some_map)
 
 
-@app.route("/<string:isbn>")
+@app.route("/books/<string:isbn>")
 def book_page(isbn):
     values = db.execute(
-        f" select title, author, year, comments from ratings right join books on ratings.isbn=books.isbn where books.isbn='{isbn}'; ").fetchall()
+        f" select title, author, year, comments,rating from ratings right join books on ratings.isbn=books.isbn where books.isbn='{isbn}'; ").fetchall()
     # print(values[0])
     # print(len(values))
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": "DYmLgmG4nZ3cduTe4NgFg", "isbns": isbn})
+    data = res.json()
+    print(res.status_code)
     get_more = False
     if len(values) > 1:
         get_more = True
-    print(get_more)
-    return render_template("bookpage.html", row=values[0], results=values, isbn=isbn, get_more=get_more)
+
+    return render_template("bookpage.html", row=values[0], results=values, isbn=isbn, get_more=get_more,
+                           status_code=res.status_code, api=data["books"][0])
+
+
+@app.route("/review", methods=["POST"])
+def review_page():
+    comments = request.form.get("comments")
+    rating = request.form.get("rating")
+    isbn=request.form.get("isbn")
+    print(f"select * from books where isbn='{isbn}' and username='{session['user']}'")
+    value=db.execute(f"select * from ratings where isbn='{isbn}' and username='{session['user']}'").fetchall()
+    print(value)
+    if len(value)==1:
+        return "Sorry you have already submitted a review for this book"
+    print(f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
+    db.execute(f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
+    db.commit()
+    return "Review submitted"
