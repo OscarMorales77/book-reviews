@@ -24,6 +24,7 @@ select username, title,rating from ratings join books on ratings.isbn=books.isbn
 select AVG(rating), author, from ratings join books on ratings.isbn=books.isbn where author='Susan Cooper';
 select avg(rating) from ratings join books on ratings.isbn=books.isbn where author='Susan Cooper';
 
+postgresql://trjdzbteawlnbf:47b67860880a40a4bfdf8df967dc3b0f019c9a4226ceb64453cdd6b878be782b@ec2-107-22-162-8.compute-1.amazonaws.com:5432/d18ctfg7un8g64
 
 
 psql postgres://USERNAME%40HOSTNAME:PASSWORD@HOSTNAME .postgres.database.azure.com:5432/DBNAME
