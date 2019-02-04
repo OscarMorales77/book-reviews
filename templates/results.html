@@ -27,8 +27,9 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron text-center">
     <div class="container">
-
-        {% if num_results == 1 %}
+        {% if num_results == 0 %}
+        <h1 class="jumbotron-heading">Sorry, no results were found in our database.</h1>
+        {% elif num_results == 1 %}
         <h1 class="jumbotron-heading">{{num_results}} result was found!</h1>
         {% else %}
         <h1 class="jumbotron-heading">{{num_results}} results were found!</h1>

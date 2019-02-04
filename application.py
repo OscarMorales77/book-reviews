@@ -1,6 +1,7 @@
 import os, requests
 
-from flask import Flask, session, render_template, request, jsonify
+from flask import Flask, session, render_template, request, jsonify, redirect, url_for
+
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -38,19 +39,17 @@ def query_results(query, m_type):
         print("-------calling isbn/author function " + m_type)
         # something to consider is the performance of LOWER on a large database
         values = db.execute(f"select * from books where LOWER({m_type}) like LOWER('{query}%')").fetchall()
-        if len(values) == 0:
-            return "Sorry no Results!"
+
 
         return render_template("results.html", num_results=len(values), values=values, user_name=session["user"])
     else:
         values = db.execute(f"select * from books where title  ~* '{query}' ").fetchall()
 
-        if len(values) == 0:
-            return "Sorry no Results!"
+
 
         return render_template("results.html", num_results=len(values), values=values, user_name=session["user"])
 
-@app.route("/verify", methods=["GET"])
+#@app.route("/verify", methods=["GET"])
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
@@ -72,7 +71,7 @@ def search():
     elif request.method=="GET" and "user" in session.keys() and session[session["user"]]:
         return render_template("search.html", user_name=session["user"])
     else:
-        return render_template("404.html")
+        return render_template("404.html",logOut=False)
 
 
 @app.route("/register", methods=["POST"])
@@ -99,9 +98,10 @@ def verify():
     if len(values) == 1 and username == values[0][0] and password == values[0][1]:
         session[username] = True
         session["user"] = username
-        return render_template("search.html", user_name=username)
+        #return render_template("search.html", user_name=username)
+        return redirect(url_for('search'))
 
-    return render_template("404.html")
+    return render_template("404.html",logOut=True)
 
 
 @app.route("/secret")
@@ -110,13 +110,14 @@ def secret():
     # as that is the only way one can index the keys; the register maps the username to a boolean true which i check below
     if len(session) != 0 and session[list(session)[0]]:
         return "Secrete Page"
-    return render_template("404.html")
+    return render_template("404.html",logOut=False)
 
 
 @app.route("/logout", methods=["POST"])
 def logout():
+    name = session["user"]
     session.clear()  # remove all keys from the map named "session" that is a global variable
-    return "logged out!"
+    return render_template("logout.html",user_name=name)
 
 
 @app.route("/api/<string:isbn>")
