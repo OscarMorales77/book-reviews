@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title_page %} 403 Forbidden {% endblock %}
+{% block body %}
+        {% if logOut %}
+        <h1 class="jumbotron-heading">Invalid Username or Password</h1>
+
+        {% else %}
+        <h1>403 Forbidden: You must log in to perform this action</h1>
+        {% endif %}
+
+
+
+
+
+
+<p><a href="{{ url_for('index') }}">Main Page</a>
+
+
+
+
+
+    {% endblock %}

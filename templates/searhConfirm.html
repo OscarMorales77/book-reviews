@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title_page %} Search Results{% endblock %}
+
+
+{% block body %}
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <span class="navbar-brand ">Hi {{user_name}}</span>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mr-auto">
+
+        </div>
+        <form class="form-inline mt-2 mt-md-0" action="/search" method="GET">
+
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Back to Search</button>
+        </form>
+        &nbsp;
+        &nbsp;
+
+        <form class="form-inline mt-2 mt-md-0" action="/logout" method="POST">
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Log Out</button>
+        </form>
+    </div>
+</nav>
+
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron text-center">
+    <div class="container">
+
+        {% if num_results == 1 %}
+        <h1 class="jumbotron-heading">Sorry, you have already submitted a review for this book.</h1>
+        {% else %}
+        <h1 class="jumbotron-heading">Thank you for submitting a review.</h1>
+        {% endif %}
+
+
+
+    </div>
+</div>
+
+
+<div class="container">
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">By Oscar Morales</span>
+    </div>
+</footer>
+
+
+{% endblock %}
+
+

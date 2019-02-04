@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title_page %} Search Results{% endblock %}
+
+
+{% block body %}
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <span class="navbar-brand ">Bye {{user_name}}</span>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mr-auto">
+
+        </div>
+
+        <form class="form-inline mt-2 mt-md-0" action="/" method="GET">
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Home Page</button>
+        </form>
+    </div>
+</nav>
+
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron text-center">
+    <div class="container">
+
+        <h1 class="jumbotron-heading">Thank you for visiting Book Reviews!</h1>
+
+
+    </div>
+</div>
+
+
+<div class="container">
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">By Oscar Morales</span>
+    </div>
+</footer>
+
+
+{% endblock %}
+
+
