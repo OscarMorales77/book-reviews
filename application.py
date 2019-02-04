@@ -30,7 +30,6 @@ current_user = None
 
 @app.route("/")
 def index():
-
     return render_template("index.html")
 
 
@@ -40,16 +39,14 @@ def query_results(query, m_type):
         # something to consider is the performance of LOWER on a large database
         values = db.execute(f"select * from books where LOWER({m_type}) like LOWER('{query}%')").fetchall()
 
-
         return render_template("results.html", num_results=len(values), values=values, user_name=session["user"])
     else:
         values = db.execute(f"select * from books where title  ~* '{query}' ").fetchall()
 
-
-
         return render_template("results.html", num_results=len(values), values=values, user_name=session["user"])
 
-#@app.route("/verify", methods=["GET"])
+
+# @app.route("/verify", methods=["GET"])
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
@@ -68,10 +65,10 @@ def search():
             return query_results(author, "author")
         else:
             return "Sorry, only one input field must be submitted"
-    elif request.method=="GET" and "user" in session.keys() and session[session["user"]]:
+    elif request.method == "GET" and "user" in session.keys() and session[session["user"]]:
         return render_template("search.html", user_name=session["user"])
     else:
-        return render_template("404.html",logOut=False)
+        return render_template("404.html", logOut=False)
 
 
 @app.route("/register", methods=["POST"])
@@ -86,7 +83,6 @@ def hello():
 
 @app.route("/verify", methods=["POST"])
 def verify():
-
     username = request.form.get("username")
     password = request.form.get("password")
     sql_command = f"select username, password from users where LOWER(username)=LOWER('{username}') AND LOWER(password)=LOWER('{password}')"
@@ -98,10 +94,10 @@ def verify():
     if len(values) == 1 and username == values[0][0] and password == values[0][1]:
         session[username] = True
         session["user"] = username
-        #return render_template("search.html", user_name=username)
+        # return render_template("search.html", user_name=username)
         return redirect(url_for('search'))
 
-    return render_template("404.html",logOut=True)
+    return render_template("404.html", logOut=True)
 
 
 @app.route("/secret")
@@ -110,24 +106,27 @@ def secret():
     # as that is the only way one can index the keys; the register maps the username to a boolean true which i check below
     if len(session) != 0 and session[list(session)[0]]:
         return "Secrete Page"
-    return render_template("404.html",logOut=False)
+    return render_template("404.html", logOut=False)
 
 
 @app.route("/logout", methods=["POST"])
 def logout():
     name = session["user"]
     session.clear()  # remove all keys from the map named "session" that is a global variable
-    return render_template("logout.html",user_name=name)
+    return render_template("logout.html", user_name=name)
 
 
 @app.route("/api/<string:isbn>")
 def api_request(isbn):
-    values = db.execute(f" select title, author, year,ratings.isbn, count(rating), avg(rating) from ratings join books "
-                        f"on ratings.isbn=books.isbn GROUP BY  title, author, year, ratings.isbn having ratings.isbn='{isbn}'; ").fetchall()
+    values = db.execute(f"select title, author, year,books.isbn, count(rating), avg(rating) from books left join ratings on ratings.isbn=books.isbn GROUP BY  title, author, year, books.isbn having books.isbn='{isbn}'").fetchall()
+    print(values)
     if len(values) == 0:  # no results found
         return jsonify({"error": "Invalid isbn"}), 404
+    average=values[0][5]
+    if values[0][5] is None:
+        average=0
     some_map = {"title": values[0][0], "author": values[0][1], "year": values[0][2], "isbn": isbn,
-                "review_count": values[0][4], "average_score": float(values[0][5])}
+                "review_count": values[0][4], "average_score": average}
 
     return jsonify(some_map)
 
@@ -148,7 +147,7 @@ def book_page(isbn):
         get_more = True
 
     return render_template("bookpage.html", row=values[0], results=values, isbn=isbn, get_more=get_more,
-                           status_code=res.status_code, api=data["books"][0],user_name=session["user"])
+                           status_code=res.status_code, api=data["books"][0], user_name=session["user"])
 
 
 @app.route("/review", methods=["POST"])
@@ -160,10 +159,10 @@ def review_page():
     value = db.execute(f"select * from ratings where isbn='{isbn}' and username='{session['user']}'").fetchall()
     print(value)
     if len(value) == 1:
-        return render_template("searhConfirm.html",user_name=session["user"],num_results=len(value))
+        return render_template("searhConfirm.html", user_name=session["user"], num_results=len(value))
     print(
         f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.execute(
         f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.commit()
-    return render_template("searhConfirm.html",user_name=session["user"])
+    return render_template("searhConfirm.html", user_name=session["user"])
