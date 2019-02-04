@@ -64,3 +64,6 @@ INSERT INTO ratings (rating, isbn, username, comments) VALUES (3.5,1857231082,'b
 
 select title, author, year, comments from ratings right join books on ratings.isbn=books.isbn where books.isbn='0441017150';
 
+
+
+select title, author, year,books.isbn, count(rating), avg(rating) from books left join ratings on ratings.isbn=books.isbn GROUP BY  title, author, year, books.isbn having books.isbn='0441017150';

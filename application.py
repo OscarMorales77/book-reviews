@@ -126,7 +126,7 @@ def api_request(isbn):
     if values[0][5] is None:
         average=0
     some_map = {"title": values[0][0], "author": values[0][1], "year": values[0][2], "isbn": isbn,
-                "review_count": values[0][4], "average_score": average}
+                "review_count": values[0][4], "average_score": float(average)}
 
     return jsonify(some_map)
 
