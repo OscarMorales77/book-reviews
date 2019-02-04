@@ -72,7 +72,7 @@ def search():
     elif request.method=="GET" and "user" in session.keys() and session[session["user"]]:
         return render_template("search.html", user_name=session["user"])
     else:
-        return "Sorry you must log in to perform a search!"
+        return render_template("404.html")
 
 
 @app.route("/register", methods=["POST"])
@@ -82,7 +82,7 @@ def hello():
     myMap = {"first": first, "last": last}
     db.execute("INSERT INTO users(username, password) VALUES  (:first, :last)", myMap)
     db.commit()
-    return "You typed " + first + " " + last
+    return render_template("confirm.html")
 
 
 @app.route("/verify", methods=["POST"])
@@ -101,7 +101,7 @@ def verify():
         session["user"] = username
         return render_template("search.html", user_name=username)
 
-    return "You are not registered!"
+    return render_template("404.html")
 
 
 @app.route("/secret")
@@ -110,7 +110,7 @@ def secret():
     # as that is the only way one can index the keys; the register maps the username to a boolean true which i check below
     if len(session) != 0 and session[list(session)[0]]:
         return "Secrete Page"
-    return "Not logged-in!"
+    return render_template("404.html")
 
 
 @app.route("/logout", methods=["POST"])
@@ -159,10 +159,10 @@ def review_page():
     value = db.execute(f"select * from ratings where isbn='{isbn}' and username='{session['user']}'").fetchall()
     print(value)
     if len(value) == 1:
-        return "Sorry you have already submitted a review for this book"
+        return render_template("searhConfirm.html",user_name=session["user"],num_results=len(value))
     print(
         f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.execute(
         f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.commit()
-    return "Review submitted"
+    return render_template("searhConfirm.html",user_name=session["user"])
