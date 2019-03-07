@@ -74,6 +74,10 @@ def search():
 @app.route("/register", methods=["POST"])
 def hello():
     first = request.form.get("firstName")
+    sql_command = f"select username from users where username='{first}'"
+    values = db.execute(sql_command).fetchall()
+    if len(values) == 1:
+        return render_template("userexists.html")
     last = request.form.get("lastName")
     myMap = {"first": first, "last": last}
     db.execute("INSERT INTO users(username, password) VALUES  (:first, :last)", myMap)
