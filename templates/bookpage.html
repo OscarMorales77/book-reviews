@@ -3,8 +3,13 @@
 {% block extra %}
 <link href="https://v4-alpha.getbootstrap.com/examples/jumbotron/jumbotron.css" rel="stylesheet">{% endblock %}
 {% block body %}
+
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <span class="navbar-brand ">Hi {{user_name}}</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav mr-auto">
 
@@ -53,7 +58,7 @@
         <h2 class="form-inline">Submit A Review:</h2>
 
         <form action="/review" class="form-inline" method="POST">
-            <input type="hidden" name="isbn" value="{{isbn}}"/>
+            <input type="hidden" name="isbn" value="{{isbn}}" />
 
             <div class="col-auto">
                 <label>Comments</label>

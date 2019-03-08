@@ -3,58 +3,58 @@
 
 {% block body %}
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-		<span class="navbar-brand ">Hi {{user_name}}</span>
-		<div class="collapse navbar-collapse" id="navbarCollapse">
-			<div class="navbar-nav mr-auto">
+    <span class="navbar-brand ">Hi {{user_name}}</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mr-auto"> </div>
 
+        <form class="form-inline mt-2 mt-md-0" action="/logout" method="POST">
+
+            <button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Log Out</button>
+        </form>
+    </div>
+</nav>
+
+
+<div class="jumbotron">
+	<div class="container">
+		<h1 class="col-6">Search for a book by</h2>
+
+			<div class="col-6">
+				<form action="/search" method="POST">
+					<div class="form-group">
+						<label>ISBN Number</label>
+						<input type="text" class="form-control" name="isbn" placeholder="ISBN">
+					</div>
+					<div class="form-group">
+						<label> Title</label>
+						<input type="text" class="form-control" name="title" placeholder="Title">
+					</div>
+					<div class="form-group">
+						<label> Author</label>
+						<input type="text" class="form-control" name="author" placeholder="Author">
+					</div>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
 			</div>
 
 
-			<form class="form-inline mt-2 mt-md-0"  action="/logout"  method="POST">
+	</div>
+</div>
 
-				<button class="btn btn-outline-info my-2 my-sm-0 " type="submit">Log Out</button>
-			</form>
-		</div>
-	</nav>
+<div class="container">
 
+</div> <!-- /container -->
 
-	<!-- Main jumbotron for a primary marketing message or call to action -->
-	<div class="jumbotron">
-		<div class="container">
-			<h1 class="col-6">Search for a book by</h2>
-
-				<div class="col-6">
-					<form action="/search"  method="POST" >
-						<div class="form-group">
-							<label >ISBN Number</label>
-							<input type="text" class="form-control" name="isbn" placeholder="ISBN" >
-						</div>
-						<div class="form-group">
-							<label > Title</label>
-							<input type="text" class="form-control" name="title" placeholder="Title" >
-						</div>
-						<div class="form-group">
-							<label > Author</label>
-							<input type="text" class="form-control" name="author" placeholder="Author" >
-						</div>
-
-						<button type="submit" class="btn btn-primary">Submit</button>
-					</form>
-				</div>
-
-
-			</div>
-		</div>
-
-		<div class="container">
-
-		</div> <!-- /container -->
-
-		<footer class="footer">
-			<div class="container">
-				<span class="text-muted">By Oscar Morales</span>
-			</div>
-		</footer>
+<footer class="footer">
+	<div class="container">
+		<span class="text-muted">By Oscar Morales</span>
+	</div>
+</footer>
 
 
 

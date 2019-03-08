@@ -6,7 +6,7 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-# import importBooks2
+
 app = Flask(__name__)
 
 # Check for environment variable
@@ -35,7 +35,6 @@ def index():
 
 def query_results(query, m_type):
     if m_type == "isbn" or m_type == "author":
-        print("-------calling isbn/author function " + m_type)
         # something to consider is the performance of LOWER on a large database
         values = db.execute(f"select * from books where LOWER({m_type}) like LOWER('{query}%')").fetchall()
 
@@ -55,13 +54,10 @@ def search():
         author = request.form.get("author")
 
         if len(isbn) != 0 and len(title) == 0 and len(author) == 0:
-            print("isb search")
             return query_results(isbn, "isbn")
         elif len(title) != 0 and (len(author) == 0 and len(isbn) == 0):
-            print("title search")
             return query_results(title, "title")
         elif len(author) != 0 and (len(title) == 0 and len(isbn) == 0):
-            print("author search")
             return query_results(author, "author")
         else:
             return "Sorry, only one input field must be submitted"
@@ -125,7 +121,6 @@ def logout():
 def api_request(isbn):
     values = db.execute(
         f"select title, author, year,books.isbn, count(rating), avg(rating) from books left join ratings on ratings.isbn=books.isbn GROUP BY  title, author, year, books.isbn having books.isbn='{isbn}'").fetchall()
-    print(values)
     if len(values) == 0:  # no results found
         return jsonify({"error": "Invalid isbn"}), 404
     average = values[0][5]
@@ -141,13 +136,9 @@ def api_request(isbn):
 def book_page(isbn):
     values = db.execute(
         f" select title, author, year, comments,rating from ratings right join books on ratings.isbn=books.isbn where books.isbn='{isbn}'; ").fetchall()
-    # print(values[0])
-    # print(len(values))
     res = requests.get("https://www.goodreads.com/book/review_counts.json",
                        params={"key": "DYmLgmG4nZ3cduTe4NgFg", "isbns": isbn})
     data = res.json()
-    print(res.status_code)
-    print(values)
     get_more = False
     if len(values) > 1:
         get_more = True
@@ -161,13 +152,9 @@ def review_page():
     comments = request.form.get("comments")
     rating = request.form.get("rating")
     isbn = request.form.get("isbn")
-    print(f"select * from books where isbn='{isbn}' and username='{session['user']}'")
     value = db.execute(f"select * from ratings where isbn='{isbn}' and username='{session['user']}'").fetchall()
-    print(value)
     if len(value) == 1:
         return render_template("searhConfirm.html", user_name=session["user"], num_results=len(value))
-    print(
-        f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.execute(
         f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.commit()

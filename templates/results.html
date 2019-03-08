@@ -3,9 +3,12 @@
 
 
 {% block body %}
-
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <span class="navbar-brand ">Hi {{user_name}}</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav mr-auto">
 
@@ -47,7 +50,7 @@
         <div class="col-md-2">
             <div class="card mb-4 box-shadow">
                 <img class="card-img-top" alt="https://via.placeholder.com/348x225"
-                     src="http://covers.openlibrary.org/b/isbn/{{row.isbn}}-M.jpg" height="155px" width="200">
+                    src="http://covers.openlibrary.org/b/isbn/{{row.isbn}}-M.jpg" height="155px" width="200">
                 <div class="card-body">
                     <p class="card-text">
                         <small>Tittle: {{row.title}} <br>Author: {{row.author}}<br>Year: {{row.year}}<br>ISBN:
@@ -80,5 +83,3 @@
 
 
 {% endblock %}
-
-

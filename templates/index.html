@@ -2,15 +2,14 @@
 {% block title_page %} Book Reviews {% endblock %}
 
 {% block body %}
-
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <span class="navbar-brand ">Welcome to Book Reviews</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="navbar-nav mr-auto">
-
-        </div>
-
-
+        <div class="navbar-nav mr-auto"> </div>
         <form class="form-inline mt-2 mt-md-0" action="/verify" method="POST">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
@@ -19,29 +18,30 @@
             <input class="form-control mr-sm-2" type="password" placeholder="Password" name="password" required>
             <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Log In</button>
         </form>
+
     </div>
 </nav>
 
 
-<!-- Main jumbotron for a primary marketing message or call to action -->
+
 <div class="jumbotron">
     <div class="container">
         <h1 class="col-6">Sign Up</h1>
 
-            <div class="col-6">
-                <form action="/register" method="POST">
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" class="form-control" placeholder="Desired Username" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" class="form-control" placeholder="Password" name="lastName" required>
-                    </div>
+        <div class="col-6">
+            <form action="/register" method="POST">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-control" placeholder="Desired Username" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" placeholder="Password" name="lastName" required>
+                </div>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
 
     </div>
 </div>
