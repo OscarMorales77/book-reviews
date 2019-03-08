@@ -6,7 +6,6 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-
 app = Flask(__name__)
 
 # Check for environment variable
@@ -24,10 +23,7 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-# A global variable for the current session to track user
-current_user = None
-
-
+#index route
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -45,7 +41,7 @@ def query_results(query, m_type):
         return render_template("results.html", num_results=len(values), values=values, user_name=session["user"])
 
 
-# @app.route("/verify", methods=["GET"])
+#search route
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
@@ -66,7 +62,7 @@ def search():
     else:
         return render_template("404.html", logOut=False)
 
-
+#register route
 @app.route("/register", methods=["POST"])
 def hello():
     first = request.form.get("firstName")
@@ -163,4 +159,3 @@ def review_page():
 
 if __name__ == '__main__':
     app.run(debug=True)
-   
