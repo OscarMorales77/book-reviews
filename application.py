@@ -76,6 +76,7 @@ def hello():
     first = request.form.get("firstName")
     sql_command = f"select username from users where username='{first}'"
     values = db.execute(sql_command).fetchall()
+    # check that username does not already exists
     if len(values) == 1:
         return render_template("userexists.html")
     last = request.form.get("lastName")
@@ -122,13 +123,14 @@ def logout():
 
 @app.route("/api/<string:isbn>")
 def api_request(isbn):
-    values = db.execute(f"select title, author, year,books.isbn, count(rating), avg(rating) from books left join ratings on ratings.isbn=books.isbn GROUP BY  title, author, year, books.isbn having books.isbn='{isbn}'").fetchall()
+    values = db.execute(
+        f"select title, author, year,books.isbn, count(rating), avg(rating) from books left join ratings on ratings.isbn=books.isbn GROUP BY  title, author, year, books.isbn having books.isbn='{isbn}'").fetchall()
     print(values)
     if len(values) == 0:  # no results found
         return jsonify({"error": "Invalid isbn"}), 404
-    average=values[0][5]
+    average = values[0][5]
     if values[0][5] is None:
-        average=0
+        average = 0
     some_map = {"title": values[0][0], "author": values[0][1], "year": values[0][2], "isbn": isbn,
                 "review_count": values[0][4], "average_score": float(average)}
 
@@ -170,3 +172,8 @@ def review_page():
         f"INSERT INTO ratings (rating, isbn, username, comments) VALUES ({rating},'{isbn}','{session['user']}', '{comments}')")
     db.commit()
     return render_template("searhConfirm.html", user_name=session["user"])
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+   
